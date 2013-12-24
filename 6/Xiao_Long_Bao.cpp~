@@ -1,0 +1,30 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int n, d[105], a[105];
+
+int solve(int bit){
+    int ans = 0;
+    if(bit == 0)return 0;
+    for(int i = 0;i < n;i++){
+	int res = 0;
+	if(((1 << i) & bit)==0)continue;
+	for(int j = max(0, i - d[i]);j <= min(n - 1, i + d[i]);j++){
+	    if(i == j)continue;
+	    if((1<<j) & bit)res++;
+	}
+	res *= a[i];
+	ans = max(ans, res + solve(bit ^ (1 << i)));
+    }
+    return ans;
+}
+
+int main(){
+    cin >> n;
+    for(int i = 0;i < n;i++)cin >> d[i];
+    for(int j = 0;j < n;j++)cin >> a[j];
+    cout << solve((1 << n) - 1) << endl;
+    return 0;
+}
